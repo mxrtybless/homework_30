@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import kg.attractor.java.homework.domain.Order;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Map;
+import kg.attractor.java.homework.domain.Item;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -92,6 +94,40 @@ public class RestaurantOrders {
         return orders.stream()
                 .map(o -> o.getCustomer().getEmail())
                 .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    public Map<String, List<Order>> getOrdersGroupedByCustomerName() {
+        return orders.stream()
+                .collect(Collectors.groupingBy(order -> order.getCustomer().getFullName()));
+    }
+
+    public Map<String, Double> getTotalAmountByCustomerName() {
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCustomer().getFullName(),
+                        Collectors.summingDouble(Order::getTotal)
+                ));
+    }
+
+    public Optional<String> getCustomerWithMaxTotalAmount() {
+        return getTotalAmountByCustomerName().entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey);
+    }
+
+    public Optional<String> getCustomerWithMinTotalAmount() {
+        return getTotalAmountByCustomerName().entrySet().stream()
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey);
+    }
+
+    public Map<String, Integer> getSoldItemsAmount() {
+        return orders.stream()
+                .flatMap(order -> order.getItems().stream())
+                .collect(Collectors.groupingBy(
+                        Item::getName,
+                        Collectors.summingInt(Item::getAmount)
+                ));
     }
     // Наполните этот класс решением домашнего задания.
     // Вам необходимо создать все необходимые методы
