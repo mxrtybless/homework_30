@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import kg.attractor.java.homework.domain.Order;
+import java.util.Set;
+import java.util.TreeSet;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -72,6 +74,24 @@ public class RestaurantOrders {
         return orders.stream()
                 .filter(Order::isHomeDelivery)
                 .min(Comparator.comparingDouble(Order::getTotal));
+    }
+
+    public List<Order> getOrdersInTotalRange(double min, double max) {
+        return orders.stream()
+                .filter(o -> o.getTotal() >= min && o.getTotal() <= max)
+                .collect(Collectors.toList());
+    }
+
+    public double getTotalRevenue() {
+        return orders.stream()
+                .mapToDouble(Order::getTotal)
+                .sum();
+    }
+
+    public Set<String> getSortedCustomerEmails() {
+        return orders.stream()
+                .map(o -> o.getCustomer().getEmail())
+                .collect(Collectors.toCollection(TreeSet::new));
     }
     // Наполните этот класс решением домашнего задания.
     // Вам необходимо создать все необходимые методы
