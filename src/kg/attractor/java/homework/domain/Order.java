@@ -58,4 +58,15 @@ public class Order {
                 .mapToDouble(item -> item.getPrice() * item.getAmount())
                 .sum();
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "customer=" + customer.getFullName() +
+                ", email=" + customer.getEmail() +
+                ", homeDelivery=" + homeDelivery +
+                ", total=" + total +
+                ", items=" + items +
+                '}';
+    }
 }
