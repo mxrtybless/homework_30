@@ -58,3 +58,4 @@ public class Order {
                 .mapToDouble(item -> item.getPrice() * item.getAmount())
                 .sum();
     }
+}

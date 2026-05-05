@@ -2,6 +2,7 @@ package kg.attractor.java.homework;
 
 import com.google.gson.Gson;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import kg.attractor.java.homework.domain.Order;
 
@@ -54,6 +55,23 @@ public class RestaurantOrders {
                 .sorted(Comparator.comparingDouble(Order::getTotal))
                 .limit(amount)
                 .collect(Collectors.toList());
+    }
+    public List<Order> getHomeDeliveryOrders() {
+        return orders.stream()
+                .filter(Order::isHomeDelivery)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<Order> getMostProfitableHomeOrder() {
+        return orders.stream()
+                .filter(Order::isHomeDelivery)
+                .max(Comparator.comparingDouble(Order::getTotal));
+    }
+
+    public Optional<Order> getLeastProfitableHomeOrder() {
+        return orders.stream()
+                .filter(Order::isHomeDelivery)
+                .min(Comparator.comparingDouble(Order::getTotal));
     }
     // Наполните этот класс решением домашнего задания.
     // Вам необходимо создать все необходимые методы
