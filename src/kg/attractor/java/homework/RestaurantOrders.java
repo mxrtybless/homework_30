@@ -1,7 +1,8 @@
 package kg.attractor.java.homework;
 
 import com.google.gson.Gson;
-
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import kg.attractor.java.homework.domain.Order;
 
 import java.io.IOException;
@@ -37,7 +38,23 @@ public class RestaurantOrders {
     //----------------------------------------------------------------------
     //------   Реализация ваших методов должна быть ниже этой линии   ------
     //----------------------------------------------------------------------
+    public void printOrders() {
+        orders.forEach(System.out::println);
+    }
 
+    public List<Order> getTopExpensiveOrders(int amount) {
+        return orders.stream()
+                .sorted(Comparator.comparingDouble(Order::getTotal).reversed())
+                .limit(amount)
+                .collect(Collectors.toList());
+    }
+
+    public List<Order> getTopCheapestOrders(int amount) {
+        return orders.stream()
+                .sorted(Comparator.comparingDouble(Order::getTotal))
+                .limit(amount)
+                .collect(Collectors.toList());
+    }
     // Наполните этот класс решением домашнего задания.
     // Вам необходимо создать все необходимые методы
     // для решения заданий из домашки :)
